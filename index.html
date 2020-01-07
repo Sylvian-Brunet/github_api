@@ -19,10 +19,8 @@
 					req.onload= function(){
 						if (this.status == 200) {
 							div.innerHTML += '<div style="display: flex; flex-direction: row; flex-wrap: wrap">';
-							console.log(this.responseXML.getElementsByTagName('human').length);
 							for (let i = 0; i < this.responseXML.getElementsByTagName('human').length; i++) {
 								let auteur = this.responseXML.getElementsByTagName('human')[i].getElementsByTagName('pseudo')[0].firstChild.data;
-								console.log(auteur);
 								getImg(auteur);
 							}
 							div.innerHTML += '</div>';
