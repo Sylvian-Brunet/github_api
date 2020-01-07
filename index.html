@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>Titre de la page</title>
+	</head>
+	<body>
+		<header></header>
+		<main>
+			<div id="affichage"></div>
+		</main>
+		<footer>
+			<script type="text/javascript">
+				let div = document.getElementById('affichage');
+
+				function getPeople() {
+					let req = new XMLHttpRequest();
+					req.open("GET", "people.php", true);
+					req.onload= function(){
+						if (this.status == 200) {
+							div.innerHTML += '<div style="display: flex; flex-direction: row; flex-wrap: wrap">';
+							console.log(this.responseXML.getElementsByTagName('human').length);
+							for (let i = 0; i < this.responseXML.getElementsByTagName('human').length; i++) {
+								let auteur = this.responseXML.getElementsByTagName('human')[i].getElementsByTagName('pseudo')[0].firstChild.data;
+								console.log(auteur);
+								getImg(auteur);
+							}
+							div.innerHTML += '</div>';
+						} else {
+							console.error('error');
+						}
+					};
+					req.send(null);
+				}
+
+				function getImg(auteur) {
+					let req1 = new XMLHttpRequest();
+					req1.open("POST", "human.php", true);
+					req1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+					req1.onload = function() {
+						if (this.status == 200) {
+							let url = this.responseXML.getElementsByTagName('human')[0].getElementsByTagName('url')[0].firstChild.data;
+							div.innerHTML += '<img src="' + url + '" style="width: 100px; height: 100px">';
+						} else {
+							console.error('error');
+						}
+					};
+					req1.send('auteur=' + auteur);
+				}
+
+				getPeople();
+			</script>
+		</footer>
+	</body>
+</html>
